@@ -79,10 +79,16 @@ type Shape interface {
 
 	read(io.Reader)
 	write(io.Writer)
+	GetPoints() []Point
 }
 
 // Null is an empty shape.
 type Null struct {
+}
+
+// GetPoints ok
+func (n Null) GetPoints() []Point {
+	return nil
 }
 
 // BBox Returns an empty BBox at the geometry origin.
@@ -101,6 +107,11 @@ func (n *Null) write(file io.Writer) {
 // Point is the shape that consists of single a geometry point.
 type Point struct {
 	X, Y float64
+}
+
+// GetPoints ok
+func (p Point) GetPoints() []Point {
+	return nil
 }
 
 // BBox returns the bounding box of the Point feature, i.e. an empty area at
@@ -142,6 +153,11 @@ type PolyLine struct {
 	NumPoints int32
 	Parts     []int32
 	Points    []Point
+}
+
+// GetPoints ok
+func (p PolyLine) GetPoints() []Point {
+	return p.Points
 }
 
 // NewPolyLine returns a pointer a new PolyLine created
@@ -192,6 +208,11 @@ func (p *PolyLine) write(file io.Writer) {
 // rings that may not intersect.
 type Polygon PolyLine
 
+// GetPoints ok
+func (p Polygon) GetPoints() []Point {
+	return p.Points
+}
+
 // BBox returns the bounding box of the Polygon feature
 func (p Polygon) BBox() Box {
 	return BBoxFromPoints(p.Points)
@@ -222,6 +243,11 @@ type MultiPoint struct {
 	Points    []Point
 }
 
+// GetPoints ok
+func (p MultiPoint) GetPoints() []Point {
+	return p.Points
+}
+
 // BBox returns the bounding box of the MultiPoint feature
 func (p MultiPoint) BBox() Box {
 	return BBoxFromPoints(p.Points)
@@ -246,6 +272,11 @@ type PointZ struct {
 	Y float64
 	Z float64
 	M float64
+}
+
+// GetPoints ok
+func (p PointZ) GetPoints() []Point {
+	return nil
 }
 
 // BBox eturns the bounding box of the PointZ feature which is an zero-sized area
@@ -275,6 +306,11 @@ type PolyLineZ struct {
 	ZArray    []float64
 	MRange    [2]float64
 	MArray    []float64
+}
+
+// GetPoints ok
+func (p PolyLineZ) GetPoints() []Point {
+	return p.Points
 }
 
 // BBox eturns the bounding box of the PolyLineZ feature.
@@ -312,6 +348,11 @@ func (p *PolyLineZ) write(file io.Writer) {
 
 // PolygonZ structure is identical to the PolyLineZ structure.
 type PolygonZ PolyLineZ
+
+// GetPoints ok
+func (p PolygonZ) GetPoints() []Point {
+	return p.Points
+}
 
 // BBox returns the bounding box of the PolygonZ feature
 func (p PolygonZ) BBox() Box {
@@ -362,6 +403,10 @@ func (p MultiPointZ) BBox() Box {
 	return BBoxFromPoints(p.Points)
 }
 
+// GetPoints ok
+func (p MultiPointZ) GetPoints() []Point {
+	return p.Points
+}
 func (p *MultiPointZ) read(file io.Reader) {
 	binary.Read(file, binary.LittleEndian, &p.Box)
 	binary.Read(file, binary.LittleEndian, &p.NumPoints)
@@ -392,6 +437,11 @@ type PointM struct {
 	M float64
 }
 
+// GetPoints ok
+func (p PointM) GetPoints() []Point {
+	return nil
+}
+
 // BBox returns the bounding box of the PointM feature which is a zero-sized
 // area at the X- and Y-coordinates of the point.
 func (p PointM) BBox() Box {
@@ -415,6 +465,11 @@ type PolyLineM struct {
 	Points    []Point
 	MRange    [2]float64
 	MArray    []float64
+}
+
+// GetPoints ok
+func (p PolyLineM) GetPoints() []Point {
+	return p.Points
 }
 
 // BBox returns the bounding box of the PolyLineM feature.
@@ -447,6 +502,11 @@ func (p *PolyLineM) write(file io.Writer) {
 
 // PolygonM structure is identical to the PolyLineZ structure.
 type PolygonM PolyLineZ
+
+// GetPoints ok
+func (p PolygonM) GetPoints() []Point {
+	return p.Points
+}
 
 // BBox returns the bounding box of the PolygonM feature.
 func (p PolygonM) BBox() Box {
@@ -483,6 +543,11 @@ type MultiPointM struct {
 	Points    []Point
 	MRange    [2]float64
 	MArray    []float64
+}
+
+// GetPoints ok
+func (p MultiPointM) GetPoints() []Point {
+	return p.Points
 }
 
 // BBox eturns the bounding box of the MultiPointM feature
@@ -523,6 +588,11 @@ type MultiPatch struct {
 	ZArray    []float64
 	MRange    [2]float64
 	MArray    []float64
+}
+
+// GetPoints ok
+func (p MultiPatch) GetPoints() []Point {
+	return p.Points
 }
 
 // BBox returns the bounding box of the MultiPatch feature
